@@ -1,65 +1,81 @@
 import os
 import csv
 
-#total number of months
-totalmonths = 0
+#set the input file path
+csvfilepath = os.path.join("Resources", "budget_data.csv")
 
-#net total amount of Profit/Losses
-totalamount = 0
-
-#the amount of Profit/Losses for the first month
-b_amount = 0
-
-#the amount of Profit/Losses for the row being read
-c_amount = 0
-
-#the greatest increase
+#the greatest increase and its date
 g_increase = 0
 gi_date = ""
-
-#the greatest decrease
+    
+#the greatest decrease and its date
 g_decrease = 0
 gd_date = ""
 
-
-csvfilepath = os.path.join("Resources", "budget_data.csv")
-i = 0
+#open the input file
 with open(csvfilepath) as csvfile:
     csvreader = csv.reader(csvfile, delimiter=",")
     csvheader = next(csvreader)
     #print(csvheader)
-
     
+    #Read the first row and initialnize the values
+    firstrow = next(csvreader)
+
+    #the amount of Profit/Losses for the first month
+    first_amount = int(firstrow[1])
+
+    #total number of months
+    total_months = 1
+
+    #net total amount of Profit/Losses
+    total_amount = first_amount
+    
+    #the amount of Profit/Losses for the previous month
+    prev_amount = first_amount
+
     for row in csvreader:
 
         # update values
-        totalmonths += 1
-        totalamount += int(row[1])
-        change = int(row[1]) - c_amount
+        date = row[0]
+        new_amount = int(row[1])
+        total_months += 1
+        total_amount += new_amount
+        change = new_amount - prev_amount
      
         #check the greatest values
         if g_increase < change:
             g_increase = change
-            gi_date = row[0]
+            gi_date = date
 
         if g_decrease > change:
             g_decrease = change
-            gd_date = row[0]
+            gd_date = date
         
-        #keep the amount for computing change with the next amount
-        c_amount = int(row[1])
-        if i==0:
-            b_amount = int(row[1])
-        i += 1
+        #Update the prev_amount as the new_amount for computing the next change
+        prev_amount = new_amount
+      
+#Compute the average change:
+#  new_amount from the for-loop indicates the amount of the last month
+avg_change = round((new_amount-first_amount)/(total_months-1), 2)
 
-       
-    print("Total number of months = " + str(totalmonths))
-    print("Total amount of the period = " + str(totalamount))
-    
-    avg_change = (c_amount-b_amount)/(totalmonths-1)
-    
-    print("Average change = " + repr(round(avg_change, 2)))
-    print("The greatest increase in profits: " 
-            + gi_date + " ($"+str(g_increase)+")")
-    print("The greatest decrease in profits: " 
-            + gd_date + " ($"+str(g_decrease)+")")
+#Set the print strings
+print_strings = [
+    "Financial Analysis",
+    "----------------------------------",
+    f"Total Months: {total_months}",
+    f"Total: ${total_amount}", 
+    f"Average change: ${avg_change}",
+    f"Greatest Increase in Profits: {gi_date} (${g_increase})",
+    f"Greatest Decrease in Profits: {gd_date} (${g_decrease})" ]
+
+#Print the strings on terminal
+print("\n")
+for strings in print_strings:
+    print(strings)
+
+#set the output file path
+outfilepath = os.path.join("Analysis", "budget_summary.txt")
+
+with open(outfilepath, "w") as txtfile:
+    for strings in print_strings:
+        txtfile.write( strings+"\n" )
