@@ -5,7 +5,7 @@
 Resource: election_data.csv
   with the columns 'Voter ID', 'County' and 'Candidate'.
 
-Task: Print the followins to the terminal and a txt file.  
+Task: Print the followings to the terminal and a txt file.  
   * The total number of votes cast
   * A complete list of candidates who received votes
   * The percentage of votes each candidate won
