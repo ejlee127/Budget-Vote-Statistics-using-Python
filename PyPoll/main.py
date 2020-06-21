@@ -1,21 +1,28 @@
 
 """
+<Analyzing the election records>
+
+Resource: election_data.csv
+  with the columns 'Voter ID', 'County' and 'Candidate'.
+
+Task: Print the followins to the terminal and a txt file.  
   * The total number of votes cast
   * A complete list of candidates who received votes
   * The percentage of votes each candidate won
   * The total number of votes each candidate won
   * The winner of the election based on popular vote.
+
 """
 import os
 import csv
 
 #Input file
-csvfile = os.path.join("Resources", "election_data.csv")
+csvfilepath = os.path.join("Resources", "election_data.csv")
 
 #Output file
 outfilepath = os.path.join("Analysis", "election_analysis.txt")
 
-#Define a fulction updating the result dictionaly with ky(key) and vl(value)
+#Update the result dictionaly with ky(key) and vl(value)
 def result_update(result, ky, vl):
   if ky in result.keys():
     result[ky].append(vl)
@@ -27,8 +34,9 @@ def result_update(result, ky, vl):
 total_votes = 0
 election = {}
 
-with open(csvfile) as file_ob:
-    election_data = csv.reader(file_ob, delimiter=',')
+#Open csv file
+with open(csvfilepath) as csvfile:
+    election_data = csv.reader(csvfile, delimiter=',')
     header = next(election_data)
    
     for row in election_data:
@@ -51,7 +59,7 @@ analysis = {ky : len(vl) for ky,vl in election.items()}
 #Sort analysis according to the number of votes (by values)
 sort_analysis = sorted(analysis.items(), key=lambda v:v[1], reverse=True)
 
-#To print the results, Set the print strings
+#To print the results, set the print strings
 print_strings = [
   f"===============================",
   f" Election Results",
