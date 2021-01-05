@@ -12,6 +12,6 @@ Using Jupyter notebook and pandas dataframe, we show the followings:
 
 for the finalcial records.
 
-The detailed instructions are written [instructions.md](imstructions.md)
+The detailed instructions are written [instruction.md](imstruction.md)
 
 Jun. 13, 2020
